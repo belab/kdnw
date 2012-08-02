@@ -13,7 +13,8 @@ Local $clicks[10][2] = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0
 Local $pixel[10][25]
 Local $clickCount = 0
 Local $isPlaying = 0
-Local $isAIOn = 0
+Local $bruteForceClick = 0
+Local $speed = 2
 
 Opt("GUIOnEventMode", 1)
 $mainwindow = GUICreate("KDNW", 200, 300 )
@@ -32,22 +33,22 @@ GUICtrlCreateLabel("(A)dd click: Key a", 0, CurrentLine() )
 GUICtrlCreateLabel("(C)lear clicks: Key c", 0, CurrentLine() )
 GUICtrlCreateLabel("(P)lay: Key p", 0, CurrentLine() )
 GUICtrlCreateLabel("(S)top: Key s", 0, CurrentLine())
-$aiOn = GUICtrlCreateCheckBox("Smart mode", 0, CurrentLine())
+$bruteForceOmLabel = GUICtrlCreateCheckBox("Brute force mode", 0, CurrentLine())
 CurrentLine()
-GUICtrlSetOnEvent( $aiOn, "SetAIOn" )
+GUICtrlSetOnEvent( $bruteForceOmLabel, "SetBruteForceOn" )
 $countLabel = GUICtrlCreateLabel("Recorded clicks: 0", 0, CurrentLine())
 
 GUISetState(@SW_SHOW)
 
-Func SetAIOn()
+Func SetBruteForceOn()
 	$on = 0	
-	$on = GUICtrlRead($aiOn)
+	$on = GUICtrlRead($bruteForceClick)
 	If $on = $GUI_CHECKED Then
 		; Msgbox(0,"AI is", " on");
-		$isAIOn = 1
+		$bruteForceClick = 1
 	Else
 		; Msgbox(0,"AI is", " off");
-		$isAIOn = 0
+		$bruteForceClick = 0
 	EndIf
 EndFunc
 
@@ -95,15 +96,15 @@ Func Play()
 		If $i >= $clickCount Then
 			$i = 0
 		Endif
-		MouseMove($clicks[$i][0], $clicks[$i][1], 0)
-		If $isAIOn = 1 Then
+		MouseMove($clicks[$i][0], $clicks[$i][1], $speed)
+		If $bruteForceClick = 0 Then
 			While Not CheckPixel($i) 
-				Sleep(50)
+				Sleep(3)
 			WEnd
 		Else
-			Sleep(50)
+			Sleep($speed)
 		Endif
-		MouseClick("left", $clicks[$i][0], $clicks[$i][1], 1, 0)
+		MouseClick("left", $clicks[$i][0], $clicks[$i][1], 1, $speed)
 		$i = $i + 1
 	WEnd
 EndFunc
