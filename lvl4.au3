@@ -24,37 +24,40 @@ HotKeySet("x","StoreNotEnoughPZ2")
 HotKeySet("c","StoreNotEnoughPZ3")
 
 Local $lvlUp[2] = [0,0]
-Local $lvlUpPixMap[25]
+Local $lvlUpPixMap[100]
 Local $lvlUpOk[2] = [0,0]
-Local $lvlUpOkPixMap[25]
+Local $lvlUpOkPixMap[100]
 
 Local $pzField[2] = [0,0]
 
 Local $openRef[2] = [0,0]
-Local $openRefPixMap[25]
+Local $openRefPixMap[100]
 Local $ref[2] = [0,0]
-Local $refPixMap[25]
+Local $refPixMap[100]
 Local $refOk[2] = [0,0]
-Local $refOkPixMap[25]
+Local $refOkPixMap[100]
 Local $refOkAck[2] = [0,0]
-Local $refOkAckPixMap[25]
+Local $refOkAckPixMap[100]
 Local $incrAbility[2] = [0,0]
-Local $incrAbilityPixMap[25]
+Local $incrAbilityPixMap[100]
 Local $storeAbility[2] = [0,0]
-Local $storeAbilityPixMap[25]
+Local $storeAbilityPixMap[100]
 Local $storeAbilityOk[2] = [0,0]
-Local $storeAbilityOkPixMap[25]
+Local $storeAbilityOkPixMap[100]
 
-Local $enoughPZPixel[25]
-Local $notEnoughPZPixMap1[25]
-Local $notEnoughPZPixMap2[25]
-Local $notEnoughPZPixMap3[25]
+Local $pzFieldPixel[100]
+Local $enoughPZPixel[100]
+Local $notEnoughPZPixMap1[100]
+Local $notEnoughPZPixMap2[100]
+Local $notEnoughPZPixMap3[100]
+
+Local $graphics[20]
 
 Local $isPlaying = 0
 Local $speed = 5
 
 Opt("GUIOnEventMode", 1)
-$mainwindow = GUICreate("Level legend", 250, 350 )
+$mainwindow = GUICreate("Level legend", 200, 350 )
 ; GuiSetStyle($DS_SETFOREGROUND, $WS_EX_TOPMOST)
 
 Local $currentLine = 10;
@@ -70,25 +73,51 @@ GUICtrlCreateLabel("(Q)uit: Key q", 0, CurrentLine())
 GUICtrlCreateLabel("(P)lay: Key p", 0, CurrentLine() )
 GUICtrlCreateLabel("(S)top: Key s", 0, CurrentLine())
 CurrentLine()
-$label1 = GUICtrlCreateLabel("(1) Store lvl up (invalid)", 0, CurrentLine())
-$label2 = GUICtrlCreateLabel("(2) Store lvl up ok (invalid)", 0, CurrentLine())
-$label3 = GUICtrlCreateLabel("(3) Store PZ field check (invalid)", 0, CurrentLine())
-$label4 = GUICtrlCreateLabel("(4) Store open ref (invalid)", 0, CurrentLine())
-$label5 = GUICtrlCreateLabel("(5) Store ref (invalid)", 0, CurrentLine())
-$label6 = GUICtrlCreateLabel("(6) Store ref ok (invalid)", 0, CurrentLine())
-$label7 = GUICtrlCreateLabel("(7) Store ref ok acknowledge (invalid)", 0, CurrentLine())
-$label8 = GUICtrlCreateLabel("(8) Store increments ability (invalid)", 0, CurrentLine())
-$label9 = GUICtrlCreateLabel("(9) Store save ability (invalid)", 0, CurrentLine())
-$label0 = GUICtrlCreateLabel("(0) Store save ability ok (invalid)", 0, CurrentLine())
+$label1 = GUICtrlCreateLabel("(1) Store lvl up", 0, CurrentLine())
+$graphics[0] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$label2 = GUICtrlCreateLabel("(2) Store lvl up ok", 0, CurrentLine())
+$graphics[1] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$label3 = GUICtrlCreateLabel("(3) Store PZ field check", 0, CurrentLine())
+$graphics[2] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$label4 = GUICtrlCreateLabel("(4) Store open ref", 0, CurrentLine())
+$graphics[3] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$label5 = GUICtrlCreateLabel("(5) Store ref", 0, CurrentLine())
+$graphics[4] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$label6 = GUICtrlCreateLabel("(6) Store ref ok", 0, CurrentLine())
+$graphics[5] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$label7 = GUICtrlCreateLabel("(7) Store ref ok acknowledge", 0, CurrentLine())
+$graphics[6] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$label8 = GUICtrlCreateLabel("(8) Store increments ability", 0, CurrentLine())
+$graphics[7] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$label9 = GUICtrlCreateLabel("(9) Store save ability", 0, CurrentLine())
+$graphics[8] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$label0 = GUICtrlCreateLabel("(0) Store save ability ok", 0, CurrentLine())
+$graphics[9] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
 CurrentLine()
-$labelEnough = GUICtrlCreateLabel("(e) Store enough pz (invalid)", 0, CurrentLine())
-$nepLabel1 = GUICtrlCreateLabel("(y) Store not enough pz 1 (invalid) ", 0, CurrentLine())
-$nepLabel2 = GUICtrlCreateLabel("(x) Store not enough pz 2 (invalid)", 0, CurrentLine())
-$nepLabel3 = GUICtrlCreateLabel("(c) Store not enough pz 3 (invalid)", 0, CurrentLine())
+$labelEnough = GUICtrlCreateLabel("(e) Store enough pz", 0, CurrentLine())
+$graphics[10] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$nepLabel1 = GUICtrlCreateLabel("(y) Store not enough pz 1 ", 0, CurrentLine())
+$graphics[11] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$nepLabel2 = GUICtrlCreateLabel("(x) Store not enough pz 2", 0, CurrentLine())
+$graphics[12] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$nepLabel3 = GUICtrlCreateLabel("(c) Store not enough pz 3", 0, CurrentLine())
+$graphics[13] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
 
 
 GUISetState(@SW_SHOW)
 
+Func DrawPixmap($index, ByRef $pixMap)
+	$i = 0
+	For $y = 0 to 9 Step 1
+		For $x = 0 to 9 Step 1
+			; GUICtrlSetGraphic($a, $GUI_GR_MOVE, 0, 0)
+			GUICtrlSetGraphic($graphics[$index], $GUI_GR_COLOR, $pixMap[$i])
+			GUICtrlSetGraphic($graphics[$index], $GUI_GR_PIXEL, $x, $y)
+			$i = $i + 1
+		Next
+	Next
+	GUICtrlSetGraphic($graphics[$index],$GUI_GR_REFRESH)
+EndFunc
 
 Func CLOSEClicked()
   Exit
@@ -105,8 +134,8 @@ EndFunc
 
 Func CheckPixel($pixMap, $pos)
 	$i = 0
-	For $y = -2 to 2 Step 1
-		For $x = -2 to 2 Step 1
+	For $y = -5 to 4 Step 1
+		For $x = -5 to 4 Step 1
 			If Not ( PixelGetColor($pos[0]+$x, $pos[1]+$y) = $pixMap[$i] ) Then
 				Return 0
 			EndIf
@@ -190,8 +219,8 @@ EndFunc
 
 Func StorePixMap(ByRef $pixMap, $pos)
 	$i = 0
-	For $y = -2 to 2 Step 1
-		For $x = -2 to 2 Step 1
+	For $y = -5 to 4 Step 1
+		For $x = -5 to 4 Step 1
 			$pixMap[$i] = PixelGetColor($pos[0]+$x, $pos[1]+$y)
 			$i = $i + 1
 		Next
@@ -210,68 +239,69 @@ EndFunc
 Func StoreLevelUp()
 	StoreMouseClick($lvlUp)
 	StorePixMap($lvlUpPixMap, $lvlUp)
-	GUICtrlSetData($label1, "(1) Store lvl up (ok)" )
+	DrawPixmap(0, $lvlUpPixMap)
 EndFunc
 
 Func StoreLevelUpOk()
 	StoreMouseClick($lvlUpOk)
 	StorePixMap($lvlUpOkPixMap, $lvlUpOk)
-	GUICtrlSetData($label2, "(2) Store lvl up ok (ok) " )
+	DrawPixmap(1, $lvlUpOkPixMap)
 EndFunc
 
 Func StorePZ()
 	StoreMouseClick($pzField)
-	GUICtrlSetData($label3, "(3) Store PZ field check (ok) " )
+	StorePixMap($pzFieldPixel, $pzField)
+	DrawPixmap(2, $pzFieldPixel)
 EndFunc
 
 Func StoreOpenRef()
 	StoreMouseClick($openRef)
 	StorePixMap($openRefPixMap, $openRef)
-	GUICtrlSetData($label4, "(4) Store open ref (ok) " )
+	DrawPixmap(3, $openRefPixMap)
 EndFunc
 Func StoreClickRef()
 	StoreMouseClick($ref)
 	StorePixMap($refPixMap, $ref)
-	GUICtrlSetData($label5, "(5) Store ref (ok) " )
+	DrawPixmap(4, $refPixMap)
 EndFunc
 Func StoreClickRefOk()
 	StoreMouseClick($refOk)
 	StorePixMap($refOkPixMap, $refOk)
-	GUICtrlSetData($label6, "(6) Store ref ok (ok) " )
+	DrawPixmap(5, $refOkPixMap)
 EndFunc
 Func StoreClickRefOkAck()
 	StoreMouseClick($refOkAck)
 	StorePixMap($refOkAckPixMap, $refOkAck)
-	GUICtrlSetData($label7, "(7) Store ref ok acknowledge (ok) " )
-EndFunc
-Func StoreEnoughPZ()
-	StorePixMap($enoughPZPixel, $pzField)
-	GUICtrlSetData($labelEnough, "(e) Store enough pz (ok) " )
-EndFunc
-Func StoreNotEnoughPZ1()
-	StorePixMap($notEnoughPZPixMap1, $pzField)
-	GUICtrlSetData($nepLabel1, "(y) Store not enough pz 1 (ok) ")
-EndFunc
-Func StoreNotEnoughPZ2()
-	StorePixMap($notEnoughPZPixMap2, $pzField)
-	GUICtrlSetData($nepLabel2, "(x) Store not enough pz 2 (ok) ")
-EndFunc
-Func StoreNotEnoughPZ3()
-	StorePixMap($notEnoughPZPixMap3, $pzField)
-	GUICtrlSetData($nepLabel3, "(c) Store not enough pz 3 (ok)" )
+	DrawPixmap(6, $refOkAckPixMap)
 EndFunc
 Func StoreIncrAbility()
 	StoreMouseClick($incrAbility)
 	StorePixMap($incrAbilityPixMap, $incrAbility)
-	GUICtrlSetData($label8, "(8) Store increments ability (ok) " )
+	DrawPixmap(7, $incrAbilityPixMap)
 EndFunc
 Func StoreAbility()
 	StoreMouseClick($storeAbility)
 	StorePixMap($storeAbilityPixMap, $storeAbility)
-	GUICtrlSetData($label9, "(9) Store save ablity (ok) " )
+	DrawPixmap(8, $storeAbilityPixMap)
 EndFunc
 Func StoreAbilityOk()
 	StoreMouseClick($storeAbilityOk)
 	StorePixMap($storeAbilityOkPixMap, $storeAbilityOk)
-	GUICtrlSetData($label0, "(0) Store save ablity ok (ok) " )
+	DrawPixmap(9, $storeAbilityOkPixMap)
+EndFunc
+Func StoreEnoughPZ()
+	StorePixMap($enoughPZPixel, $pzField)
+	DrawPixmap(10, $enoughPZPixel)
+EndFunc
+Func StoreNotEnoughPZ1()
+	StorePixMap($notEnoughPZPixMap1, $pzField)
+	DrawPixmap(11, $notEnoughPZPixMap1)
+EndFunc
+Func StoreNotEnoughPZ2()
+	StorePixMap($notEnoughPZPixMap2, $pzField)
+	DrawPixmap(12, $notEnoughPZPixMap2)
+EndFunc
+Func StoreNotEnoughPZ3()
+	StorePixMap($notEnoughPZPixMap3, $pzField)
+	DrawPixmap(13, $notEnoughPZPixMap3)
 EndFunc
