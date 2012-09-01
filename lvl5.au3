@@ -232,9 +232,6 @@ Func StorePixMap(ByRef $pixMap, $pos)
 EndFunc
 
 Func StoreMouseClick( ByRef $pos)
-	If $isPlaying = 1 Then
-		Return
-	Endif
 	$mp = MouseGetPos()
 	$pos[0] = $mp[0]
 	$pos[1] = $mp[1]
