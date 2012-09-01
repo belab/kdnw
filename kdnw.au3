@@ -36,9 +36,9 @@ GUICtrlCreateLabel("(A)dd click: Key a", 0, CurrentLine() )
 GUICtrlCreateLabel("(C)lear clicks: Key c", 0, CurrentLine() )
 GUICtrlCreateLabel("(P)lay: Key p", 0, CurrentLine() )
 GUICtrlCreateLabel("(S)top: Key s", 0, CurrentLine())
-$bruteForceClick = GUICtrlCreateCheckBox("Brute force mode", 0, CurrentLine())
+$bruteForceCheckBox = GUICtrlCreateCheckBox("Brute force mode", 0, CurrentLine())
 CurrentLine()
-GUICtrlSetOnEvent( $bruteForceClick, "SetBruteForceOn" )
+GUICtrlSetOnEvent( $bruteForceCheckBox, "SetBruteForceOn" )
 $countLabel = GUICtrlCreateLabel("Recorded clicks: 0", 0, CurrentLine())
 CurrentLine()
 CurrentLine()
@@ -70,13 +70,13 @@ EndFunc
 
 Func SetBruteForceOn()
 	$on = 0	
-	$on = GUICtrlRead($bruteForceClick)
-	Msgbox(0,"AI is", " " & $on)
+	$on = GUICtrlRead($bruteForceCheckBox)
+	; Msgbox(0,"AI is", " " & $on)
 	If $on = $GUI_CHECKED Then
-		Msgbox(0,"AI is", " on")
+		; Msgbox(0,"AI is", " on")
 		$bruteForceClick = 1
 	Else
-		Msgbox(0,"AI is", " off")
+		; Msgbox(0,"AI is", " off")
 		$bruteForceClick = 0
 	EndIf
 EndFunc
