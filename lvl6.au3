@@ -22,6 +22,7 @@ HotKeySet("^y","StoreNotEnoughPZ1")
 HotKeySet("^x","StoreNotEnoughPZ2")
 HotKeySet("^c","StoreNotEnoughPZ3")
 HotKeySet("^v","StoreNotEnoughPZ4")
+HotKeySet("^b","StoreNotEnoughPZ5")
 
 Local $lvlUp[2] = [0,0]
 Local $lvlUpPixMap[100]
@@ -51,13 +52,14 @@ Local $notEnoughPZPixMap1[100]
 Local $notEnoughPZPixMap2[100]
 Local $notEnoughPZPixMap3[100]
 Local $notEnoughPZPixMap4[100]
+Local $notEnoughPZPixMap5[100]
 Local $graphics[20]
 
 Local $isPlaying = 0
 Local $speed = 5
 
 Opt("GUIOnEventMode", 1)
-$mainwindow = GUICreate("Level legend", 200, 350 )
+$mainwindow = GUICreate("Level legend", 220, 380 )
 ; GuiSetStyle($DS_SETFOREGROUND, $WS_EX_TOPMOST)
 
 Local $currentLine = 10;
@@ -103,6 +105,8 @@ $nepLabel3 = GUICtrlCreateLabel("(c) Store not enough pz 3", 0, CurrentLine())
 $graphics[13] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
 $nepLabel4 = GUICtrlCreateLabel("(v) Store not enough pz 4", 0, CurrentLine())
 $graphics[14] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
+$nepLabel5 = GUICtrlCreateLabel("(b) Store not enough pz 5", 0, CurrentLine())
+$graphics[15] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
 
 
 GUISetState(@SW_SHOW)
@@ -172,6 +176,9 @@ Func CheckPZ()
 			Return 0 
 		EndIf
 		If CheckPixel($notEnoughPZPixMap4, $pzField) Then 
+			Return 0 
+		EndIf
+		If CheckPixel($notEnoughPZPixMap5, $pzField) Then 
 			Return 0 
 		EndIf
 	WEnd
@@ -309,4 +316,8 @@ EndFunc
 Func StoreNotEnoughPZ4()
 	StorePixMap($notEnoughPZPixMap4, $pzField)
 	DrawPixmap(14, $notEnoughPZPixMap4)
+EndFunc
+Func StoreNotEnoughPZ5()
+	StorePixMap($notEnoughPZPixMap5, $pzField)
+	DrawPixmap(15, $notEnoughPZPixMap5)
 EndFunc

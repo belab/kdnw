@@ -8,10 +8,11 @@ HotKeySet("^c","Clear")
 HotKeySet("^p","Play")
 HotKeySet("^s","Stop")
 
+Local $MaxClicks = 20
+Local $clicks[20][2] = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
+Local $pixel[20][100]
+Local $graphics[20]
 
-Local $clicks[10][2] = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
-Local $pixel[10][100]
-Local $graphics[10]
 Local $clickCount = 0
 Local $isPlaying = 0
 Local $bruteForceClick = 0
@@ -42,16 +43,10 @@ GUICtrlSetOnEvent( $bruteForceCheckBox, "SetBruteForceOn" )
 $countLabel = GUICtrlCreateLabel("Recorded clicks: 0", 0, CurrentLine())
 CurrentLine()
 CurrentLine()
-$graphics[0] = GUICtrlCreateGraphic(0, $currentLine, 10, 10)
-$graphics[1] = GUICtrlCreateGraphic(11, $currentLine, 10, 10)
-$graphics[2] = GUICtrlCreateGraphic(22, $currentLine, 10, 10)
-$graphics[3] = GUICtrlCreateGraphic(33, $currentLine, 10, 10)
-$graphics[4] = GUICtrlCreateGraphic(44, $currentLine, 10, 10)
-$graphics[5] = GUICtrlCreateGraphic(55, $currentLine, 10, 10)
-$graphics[6] = GUICtrlCreateGraphic(66, $currentLine, 10, 10)
-$graphics[7] = GUICtrlCreateGraphic(77, $currentLine, 10, 10)
-$graphics[8] = GUICtrlCreateGraphic(88, $currentLine, 10, 10)
-$graphics[9] = GUICtrlCreateGraphic(99, $currentLine, 10, 10)
+
+for $gi = 0 to $MaxClicks-1 Step 1
+	$graphics[$gi] = GUICtrlCreateGraphic($gi*11, $currentLine, 10, 10)
+Next
 
 GUISetState(@SW_SHOW)
 
@@ -157,7 +152,7 @@ Func AddMouseClick()
 	$clicks[$clickCount][0] = $mp[0]
 	$clicks[$clickCount][1] = $mp[1]
 	StorePixel($clickCount)	
-	If $clickCount < 9 Then
+	If $clickCount < $MaxClicks Then
 		$clickCount = $clickCount + 1
 		; Msgbox(0,"Info","Successfully added a click");
 	EndIf

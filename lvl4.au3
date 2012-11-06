@@ -2,26 +2,25 @@
 #include <GUIConstants.au3>
 #include <WindowsConstants.au3>
 
-HotKeySet("q","CLOSEClicked")
-HotKeySet("c","Clear")
-HotKeySet("p","Play")
-HotKeySet("s","Stop")
+HotKeySet("^q","CLOSEClicked")
+HotKeySet("^p","Play")
+HotKeySet("^s","Stop")
 
-HotKeySet("1","StoreLevelUp")
-HotKeySet("2","StoreLevelUpOk")
-HotKeySet("3","StorePZ")
-HotKeySet("4","StoreOpenRef")
-HotKeySet("5","StoreClickRef")
-HotKeySet("6","StoreClickRefOk")
-HotKeySet("7","StoreClickRefOkAck")
-HotKeySet("8","StoreIncrAbility")
-HotKeySet("9","StoreAbility")
-HotKeySet("0","StoreAbilityOk")
+HotKeySet("^1","StoreLevelUp")
+HotKeySet("^2","StoreLevelUpOk")
+HotKeySet("^3","StorePZ")
+HotKeySet("^4","StoreOpenRef")
+HotKeySet("^5","StoreClickRef")
+HotKeySet("^6","StoreClickRefOk")
+HotKeySet("^7","StoreClickRefOkAck")
+HotKeySet("^8","StoreIncrAbility")
+HotKeySet("^9","StoreAbility")
+HotKeySet("^0","StoreAbilityOk")
 
-HotKeySet("e","StoreEnoughPZ")
-HotKeySet("y","StoreNotEnoughPZ1")
-HotKeySet("x","StoreNotEnoughPZ2")
-HotKeySet("c","StoreNotEnoughPZ3")
+HotKeySet("^e","StoreEnoughPZ")
+HotKeySet("^y","StoreNotEnoughPZ1")
+HotKeySet("^x","StoreNotEnoughPZ2")
+HotKeySet("^c","StoreNotEnoughPZ3")
 
 Local $lvlUp[2] = [0,0]
 Local $lvlUpPixMap[100]
@@ -67,7 +66,6 @@ Func CurrentLine()
 EndFunc
 
 GUISetOnEvent($GUI_EVENT_CLOSE, "CLOSEClicked")
-
 
 GUICtrlCreateLabel("(Q)uit: Key q", 0, CurrentLine())
 GUICtrlCreateLabel("(P)lay: Key p", 0, CurrentLine() )
@@ -188,8 +186,8 @@ Func Play()
 			Return 
 		EndIf
 		If CheckPZ() Then
-			For $i = 0 to 3 Step 1
-				Sleep(100)
+			For $i = 0 to 10 Step 1
+				Sleep(5)
 				iF Not Click($incrAbilityPixMap, $incrAbility) Then 
 					Return 
 				EndIf
@@ -228,9 +226,6 @@ Func StorePixMap(ByRef $pixMap, $pos)
 EndFunc
 
 Func StoreMouseClick( ByRef $pos)
-	If $isPlaying = 1 Then
-		Return
-	Endif
 	$mp = MouseGetPos()
 	$pos[0] = $mp[0]
 	$pos[1] = $mp[1]
