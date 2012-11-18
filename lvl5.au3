@@ -56,8 +56,11 @@ Local $graphics[20]
 Local $isPlaying = 0
 Local $speed = 5
 
+Local $file = FileOpen( @TempDir & "\reff_5_stats.csv", 1)
+
+
 Opt("GUIOnEventMode", 1)
-$mainwindow = GUICreate("Level legend", 200, 350 )
+$mainwindow = GUICreate("Level legend", 200, 390 )
 ; GuiSetStyle($DS_SETFOREGROUND, $WS_EX_TOPMOST)
 
 Local $currentLine = 10;
@@ -103,7 +106,8 @@ $nepLabel3 = GUICtrlCreateLabel("(c) Store not enough pz 3", 0, CurrentLine())
 $graphics[13] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
 $nepLabel4 = GUICtrlCreateLabel("(v) Store not enough pz 4", 0, CurrentLine())
 $graphics[14] = GUICtrlCreateGraphic(160, $currentLine, 10, 10)
-
+CurrentLine()
+$clickTimeLabel = GUICtrlCreateLabel("Reff time: 00:00:00:000", 0, CurrentLine())
 
 GUISetState(@SW_SHOW)
 
@@ -121,6 +125,7 @@ Func DrawPixmap($index, ByRef $pixMap)
 EndFunc
 
 Func CLOSEClicked()
+  FileClose($file)
   Exit
 EndFunc
 
@@ -149,9 +154,13 @@ EndFunc
 Func Click($pixMap, $pos)
 	MouseMove($pos[0], $pos[1], $speed)
 	While Not CheckPixel($pixMap, $pos) 
-		Sleep(3)
+		If $isPlaying = 0 Then
+			Return 0
+		Endif
+		MouseMove($pos[0], $pos[1], 0)
+		Sleep(1)
 	WEnd
-	MouseClick("left", $pos[0], $pos[1], 1, $speed)
+	MouseClick("left", $pos[0], $pos[1], 1, 0)
 	Return $isPlaying
 EndFunc
 
@@ -159,20 +168,20 @@ Func CheckPZ()
 	$ready = 0
 	While Not $ready
 		If CheckPixel($enoughPZPixel, $pzField) Then 
-			Return 1 
+			Return 5 
 		EndIf
 
 		If CheckPixel($notEnoughPZPixMap1, $pzField) Then 
-			Return 0 
+			Return 1 
 		EndIf
 		If CheckPixel($notEnoughPZPixMap2, $pzField) Then 
-			Return 0 
+			Return 2 
 		EndIf
 		If CheckPixel($notEnoughPZPixMap3, $pzField) Then 
-			Return 0 
+			Return 3 
 		EndIf
 		If CheckPixel($notEnoughPZPixMap4, $pzField) Then 
-			Return 0 
+			Return 4 
 		EndIf
 	WEnd
 	Return 0
@@ -185,36 +194,46 @@ Func Play()
     $isPlaying = 1
 	While $isPlaying = 1
 		; Msgbox(0,"Info","Click level up");
-		iF Not Click($lvlUpPixMap, $lvlUp) Then 
+		If Not Click($lvlUpPixMap, $lvlUp) Then 
 			Return 
 		EndIf
-		iF Not Click($lvlUpOkPixMap, $lvlUpOk) Then 
+		Local $hour = @HOUR
+		Local $min = @MIN
+		Local $sec = @SEC
+		Local $msec = @MSEC
+		Local $time = StringFormat("%02i:%02i:%02i:%03i", $hour, $min, $sec, $msec)
+		GUICtrlSetData($clickTimeLabel, "Reff time: " & $time)
+
+		If Not Click($lvlUpOkPixMap, $lvlUpOk) Then 
 			Return 
 		EndIf
-		If CheckPZ() Then
+		Local $pzCount = CheckPZ()
+		FileWriteLine($file, StringFormat("%02i;%02i;%02i;%03i;%i", $hour, $min, $sec, $msec, $pzCount) )
+		
+		If $pzCount = 5 Then
 			For $i = 0 to 10 Step 1
 				Sleep(5)
-				iF Not Click($incrAbilityPixMap, $incrAbility) Then 
+				If Not Click($incrAbilityPixMap, $incrAbility) Then 
 					Return 
 				EndIf
 			Next
-			iF Not Click($storeAbilityPixMap, $storeAbility) Then 
+			If Not Click($storeAbilityPixMap, $storeAbility) Then 
 				Return 
 			EndIf
-			iF Not Click($storeAbilityOkPixMap, $storeAbilityOk) Then 
+			If Not Click($storeAbilityOkPixMap, $storeAbilityOk) Then 
 				Return 
 			EndIf
 		Else
-			iF Not Click($openRefPixMap, $openRef) Then 
+			If Not Click($openRefPixMap, $openRef) Then 
 				Return 
 			EndIf
-			iF Not Click($refPixMap, $ref) Then 
+			If Not Click($refPixMap, $ref) Then 
 				Return 
 			EndIf
-			iF Not Click($refOkPixMap, $refOk) Then 
+			If Not Click($refOkPixMap, $refOk) Then 
 				Return 
 			EndIf
-			iF Not Click($refOkAckPixMap, $refOkAck) Then 
+			If Not Click($refOkAckPixMap, $refOkAck) Then 
 				Return 
 			EndIf
 		EndIf		
@@ -310,3 +329,6 @@ Func StoreNotEnoughPZ4()
 	StorePixMap($notEnoughPZPixMap4, $pzField)
 	DrawPixmap(14, $notEnoughPZPixMap4)
 EndFunc
+
+FileClose($file)
+
