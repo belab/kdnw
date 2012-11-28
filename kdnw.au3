@@ -111,15 +111,15 @@ Func CompareScreenPixel($index, $offsetX, $offsetY)
 EndFunc
 
 Func CheckPixel($index)
-	For $offsetX = 0 to 2 Step 1
-		For $offsetY = 0 to 2 Step 1
+	For $offsetX = 0 to 5 Step 1
+		For $offsetY = 0 to 5 Step 1
 			If CompareScreenPixel($index, $offsetX, $offsetY) = 1 Then
 				Return 1
 			EndIf
 		Next
 	Next
-	For $offsetX = -1 to -2 Step -1
-		For $offsetY = -1 to -2 Step -1
+	For $offsetX = -1 to -5 Step -1
+		For $offsetY = -1 to -5 Step -1
 			If CompareScreenPixel($index, $offsetX, $offsetY) = 1 Then
 				Return 1
 			EndIf
