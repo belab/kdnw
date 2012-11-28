@@ -142,7 +142,7 @@ Func Play()
 		If $bruteForceClick = 0 Then
 			While Not CheckPixel($i) 
 				Sleep(3)
-				MouseMove($clicks[$i][0], $clicks[$i][1], $0)
+				MouseMove($clicks[$i][0], $clicks[$i][1], 0)
 			WEnd
 		Else
 			Sleep($speed)
