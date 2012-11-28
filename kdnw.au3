@@ -97,17 +97,35 @@ Func Stop()
 	$isPlaying = 0
 EndFunc
 
-Func CheckPixel($index)
+Func CompareScreenPixel($index, $offsetX, $offsetY)
 	$i = 0
 	For $y = -5 to 4 Step 1
 		For $x = -5 to 4 Step 1
-			If Not ( PixelGetColor($clicks[$index][0]+$x, $clicks[$index][1]+$y) = $pixel[$index][$i] ) Then
+			If Not ( PixelGetColor($clicks[$index][0]+$x+$offsetX, $clicks[$index][1]+$y+$offsetY) = $pixel[$index][$i] ) Then
 				Return 0
 			EndIf
 			$i = $i + 1
 		Next
 	Next
 	Return 1
+EndFunc
+
+Func CheckPixel($index)
+	For $offsetX = 0 to 2 Step 1
+		For $offsetY = 0 to 2 Step 1
+			If CompareScreenPixel($index, $offsetX, $offsetY) = 1 Then
+				Return 1
+			EndIf
+		Next
+	Next
+	For $offsetX = -1 to -2 Step -1
+		For $offsetY = -1 to -2 Step -1
+			If CompareScreenPixel($index, $offsetX, $offsetY) = 1 Then
+				Return 1
+			EndIf
+		Next
+	Next
+	Return 0
 EndFunc
 
 Func Play()
@@ -124,6 +142,7 @@ Func Play()
 		If $bruteForceClick = 0 Then
 			While Not CheckPixel($i) 
 				Sleep(3)
+				MouseMove($clicks[$i][0], $clicks[$i][1], $0)
 			WEnd
 		Else
 			Sleep($speed)
