@@ -16,7 +16,7 @@ Local $graphics[20]
 Local $clickCount = 0
 Local $isPlaying = 0
 Local $bruteForceClick = 0
-Local $speed = 5
+Local $speed = 1
 
 Opt("GUIOnEventMode", 1)
 $mainwindow = GUICreate("KDNW", 210, 300 )
@@ -89,7 +89,7 @@ Func CLOSEClicked()
 EndFunc
 
 While 1
-    Sleep(100)
+    Sleep(50)
 WEnd
 
 Func Stop()
@@ -141,7 +141,10 @@ Func Play()
 		MouseMove($clicks[$i][0], $clicks[$i][1], $speed)
 		If $bruteForceClick = 0 Then
 			While Not CheckPixel($i) 
-				Sleep(3)
+				If Not $isPlaying Then
+					Return
+				EndIf
+				Sleep(1)
 				MouseMove($clicks[$i][0], $clicks[$i][1], 0)
 			WEnd
 		Else
