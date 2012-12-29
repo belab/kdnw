@@ -39,6 +39,14 @@ GUICtrlCreateLabel("(P)lay: Key p", 0, CurrentLine() )
 GUICtrlCreateLabel("(S)top: Key s", 0, CurrentLine())
 $bruteForceCheckBox = GUICtrlCreateCheckBox("Brute force mode", 0, CurrentLine())
 CurrentLine()
+$cl = CurrentLine()
+GUICtrlCreateLabel("Move time", 0, $cl)
+$speedInput = GUICtrlCreateInput("1", 70, $cl )
+$speedSpinBox = GUICtrlCreateUpdown($speedInput)
+GUICtrlSetLimit($speedSpinBox,100,0)
+GUICtrlSetOnEvent( $speedInput, "SetSpeed" )
+
+CurrentLine()
 GUICtrlSetOnEvent( $bruteForceCheckBox, "SetBruteForceOn" )
 $countLabel = GUICtrlCreateLabel("Recorded clicks: 0", 0, CurrentLine())
 CurrentLine()
@@ -54,7 +62,6 @@ Func DrawPixmap($index)
 	$i = 0
 	For $y = 0 to 9 Step 1
 		For $x = 0 to 9 Step 1
-			; GUICtrlSetGraphic($a, $GUI_GR_MOVE, 0, 0)
 			GUICtrlSetGraphic($graphics[$index], $GUI_GR_COLOR, $pixel[$index][$i])
 			GUICtrlSetGraphic($graphics[$index], $GUI_GR_PIXEL, $x, $y)
 			$i = $i + 1
@@ -66,14 +73,15 @@ EndFunc
 Func SetBruteForceOn()
 	$on = 0	
 	$on = GUICtrlRead($bruteForceCheckBox)
-	; Msgbox(0,"AI is", " " & $on)
 	If $on = $GUI_CHECKED Then
-		; Msgbox(0,"AI is", " on")
 		$bruteForceClick = 1
 	Else
-		; Msgbox(0,"AI is", " off")
 		$bruteForceClick = 0
 	EndIf
+EndFunc
+
+Func SetSpeed()
+	$speed = Number( GUICtrlRead($speedInput) )
 EndFunc
 
 Func Clear()
