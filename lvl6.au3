@@ -134,7 +134,7 @@ Func CLOSEClicked()
 EndFunc
 
 While 1
-    Sleep(100)
+    Sleep(10)
 WEnd
 
 Func Stop()
@@ -142,11 +142,47 @@ Func Stop()
 	$isPlaying = 0
 EndFunc
 
-Func CheckPixel($pixMap, $pos)
+Func IsValueSimilar($v1, $v2, $eps)
+	If $v1 > $v2  Then
+		If ( $v1 - $v2 ) <= $eps Then
+			Return true
+		Endif
+	Else
+		If ( $v2 - $v1 ) <= $eps Then
+			Return true
+		Endif
+	Endif
+	Return false		
+EndFunc
+
+Func IsColorSimilar($color1, $color2, $eps)
+	$red1 = BitShift($color1, 16)
+	$green1 = BitAnd(BitShift($color1, 8),0x0000FF)
+	$blue1 = BitAnd($color1,0x0000FF)
+
+	$red2 = BitShift($color2, 16)
+	$green2 = BitAnd(BitShift($color2, 8),0x0000FF)
+	$blue2 = BitAnd($color2,0x0000FF)
+	
+	if Not IsValueSimilar($red1, $red2, $eps) Then
+		Return false
+	Endif
+	If Not IsValueSimilar($green1, $green2, $eps) Then
+		Return false
+	Endif
+	If Not IsValueSimilar($blue1, $blue2, $eps) Then
+		Return false
+	EndIf
+	Return true
+EndFunc
+
+Func CheckPixel(ByRef $pixMap, $pos)
 	$i = 0
 	For $y = -5 to 4 Step 1
 		For $x = -5 to 4 Step 1
-			If Not ( PixelGetColor($pos[0]+$x, $pos[1]+$y) = $pixMap[$i] ) Then
+			$screenPixel = PixelGetColor($pos[0]+$x, $pos[1]+$y)
+			If Not IsColorSimilar( $screenPixel, $pixMap[$i], 0x10 ) Then
+			; If Not ( PixelGetColor($pos[0]+$x, $pos[1]+$y) = $pixMap[$i] ) Then
 				Return 0
 			EndIf
 			$i = $i + 1
@@ -155,14 +191,14 @@ Func CheckPixel($pixMap, $pos)
 	Return 1
 EndFunc
 
-Func Click($pixMap, $pos)
+Func Click(ByRef $pixMap, $pos)
 	MouseMove($pos[0], $pos[1], $speed)
 	While Not CheckPixel($pixMap, $pos) 
 		If $isPlaying = 0 Then
 			Return 0
 		Endif
 		MouseMove($pos[0], $pos[1], 0)
-		Sleep(1)
+		; Sleep(1)
 	WEnd
 	MouseClick("left", $pos[0], $pos[1], 1, 0)
 	Return $isPlaying
@@ -216,8 +252,8 @@ Func Play()
 		EndIf
 
 		Local $pzCount = CheckPZ()
-		FileWriteLine($file, StringFormat("%02i;%02i;%02i;%03i;%i", $hour, $min, $sec, $msec, $pzCount) )
-		If $pzCount = 6 Then
+		; FileWriteLine($file, StringFormat("%02i;%02i;%02i;%03i;%i", $hour, $min, $sec, $msec, $pzCount) )
+		If $pzCount = 6 Or $pzCount = 5 Then
 			For $i = 0 to 10 Step 1
 				Sleep(5)
 				If Not Click($incrAbilityPixMap, $incrAbility) Then 
