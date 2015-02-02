@@ -2,6 +2,10 @@
 #include <GUIConstants.au3>
 #include <WindowsConstants.au3>
 
+
+test
+test
+
 HotKeySet("^q","CLOSEClicked")
 HotKeySet("^r","ResetTimer")
 HotKeySet("^s","StopTimer")
